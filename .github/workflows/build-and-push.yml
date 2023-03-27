@@ -35,7 +35,7 @@ jobs:
 
 
       - name: docker build
-        run: docker build -t andreaswachs/kali-docker:${{ matrix.tag }} --build-arg KALI_DESKTOP=xfce KALI_METAPACKAGE=${{ matrix.tag }} .
+        run: docker buildx build -t andreaswachs/kali-docker:${{ matrix.tag }} --build-arg KALI_DESKTOP=xfce --build-arg KALI_METAPACKAGE=${{ matrix.tag }} .
 
       - name: docker push
         run: docker push andreaswachs/kali-docker:${{ matrix.tag }}
