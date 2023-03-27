@@ -19,8 +19,10 @@ jobs:
     strategy:
       matrix:
         tag:
+          - core
           - default
           - large
+          - top10
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
