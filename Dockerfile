@@ -31,7 +31,9 @@ ENV VNCDISPLAY 1920x1080
 ENV VNCDEPTH 16
 ENV NOVNCPORT 8080
 
+FROM desktop AS final
+
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-CMD [ "/entrypoint.sh" ]
+ENTRYPOINT [ "/entrypoint.sh" ]
