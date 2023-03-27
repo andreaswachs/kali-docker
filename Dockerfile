@@ -1,6 +1,6 @@
 FROM kalilinux/kali-rolling:latest
 
-LABEL website="https://github.com/iphoneintosh/kali-docker"
+LABEL website="https://github.com/andreaswachs/kali-docker"
 LABEL description="Kali Linux with XFCE Desktop via VNC and noVNC in browser."
 
 # Install kali packages
@@ -28,13 +28,7 @@ ENV VNCDEPTH 16
 
 ENV NOVNCPORT 8080
 
-# Install custom packages
-# TODO: You can add your own packages here
-
-RUN apt-get -y install nano
-
 # Entrypoint
-
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT [ "/entrypoint.sh" ]
