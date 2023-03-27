@@ -41,4 +41,4 @@ echo "Verify the certificate fingerprint:"
 openssl x509 -in /etc/ssl/certs/novnc_cert.pem -noout -fingerprint -sha256
 
 # Start shell
-/bin/bash -c "while true; do sleep 1; done"
+/bin/bash
