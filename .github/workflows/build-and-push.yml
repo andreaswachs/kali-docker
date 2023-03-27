@@ -1,0 +1,41 @@
+name: Build and push Docker images
+
+on:
+  schedule:
+    - cron: "0 0 * * 2"
+
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+# Prevent concurrent runs
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        tag:
+          - default
+          - large
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout
+
+      - name: docker login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
+        run: |
+          echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+
+
+      - name: docker build
+        run: docker build -t andreaswachs/kali-docker:${{ matrix.tag }} --build-arg KALI_DESKTOP=xfce KALI_METAPACKAGE=${{ matrix.tag }} .
+
+      - name: docker push
+        run: docker push andreaswachs/kali-docker:${{ matrix.tag }}
