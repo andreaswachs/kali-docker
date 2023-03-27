@@ -9,18 +9,19 @@ on:
     branches:
       - main
 
-# Prevent concurrent runs
 concurrency:
   group: ${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
     strategy:
       matrix:
         tag:
+          - core
           - default
           - large
+          - top10
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -32,7 +33,6 @@ jobs:
           DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
         run: |
           echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-
 
       - name: docker build
         run: docker buildx build -t andreaswachs/kali-docker:${{ matrix.tag }} --build-arg KALI_DESKTOP=xfce --build-arg KALI_METAPACKAGE=${{ matrix.tag }} .
