@@ -1,4 +1,4 @@
-FROM kalilinux/kali-rolling:latest AS core
+FROM kalilinux/kali-rolling:latest
 
 LABEL website="https://github.com/andreaswachs/kali-docker"
 LABEL description="Kali Linux with XFCE Desktop via VNC and noVNC in browser."
@@ -8,15 +8,13 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update
 RUN apt-get -y upgrade
 
-RUN apt-get -y install tightvncserver dbus dbus-x11 novnc net-tools
+RUN apt-get -y install nano
 
-FROM core AS base
+RUN apt-get -y install tightvncserver dbus dbus-x11 novnc net-tools
 
 # Install kali desktop
 ARG KALI_DESKTOP=xfce
 RUN apt-get -y install kali-desktop-${KALI_DESKTOP}
-
-FROM base AS desktop
 
 ARG KALI_METAPACKAGE=core
 # This decides which version of the container is installed
@@ -31,7 +29,10 @@ ENV VNCDISPLAY 1920x1080
 ENV VNCDEPTH 16
 ENV NOVNCPORT 8080
 
-FROM desktop AS final
+# Ensure the launch file exists
+COPY launch.bin /launch.bin
+RUN cat /launch.bin | base64 --decode > /usr/share/novnc/utils/launch.sh 
+RUN chmod +x /usr/share/novnc/utils/launch.sh
 
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh
